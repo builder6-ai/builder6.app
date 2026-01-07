@@ -1,158 +1,90 @@
-<div align="center">
-  <a href="https://builder6.com">
-    <img src="https://builder6.com/logo.svg" alt="Builder6 Runtime Logo" width="120" height="120">
-  </a>
+# Builder6 Monorepo
 
-  <h1 align="center">Builder6 Runtime</h1>
+这是一个基于 pnpm workspaces 的多包开发项目。
 
-  <p align="center">
-    <strong>The Execution Engine for Builder6 Applications</strong>
-    <br />
-    Metadata-Driven | Private Deployment | High Performance
-  </p>
-
-  <p align="center">
-    <a href="LICENSE">
-      <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License">
-    </a>
-    <a href="https://hub.docker.com/r/builder6/runtime">
-      <img src="https://img.shields.io/docker/pulls/builder6/runtime.svg" alt="Docker Pulls">
-    </a>
-    <a href="https://github.com/builder6app/builder6.app/releases">
-      <img src="https://img.shields.io/github/v/release/builder6app/builder6.app" alt="Release">
-    </a>
-  </p>
-
-  <p align="center">
-    <a href="#-introduction">Introduction</a> •
-    <a href="#-how-it-works">How It Works</a> •
-    <a href="#-key-features">Key Features</a> •
-    <a href="#-quick-start">Quick Start</a>
-  </p>
-</div>
-
----
-
-## 📖 Introduction
-
-**Builder6 Runtime** (`builder6.app`) is a high-performance, metadata-driven execution environment designed to run applications created with [Builder6 Cloud](https://github.com/builder6app/builder6.com).
-
-Think of **Builder6 Cloud** as the "Editor" and **Builder6 Runtime** as the "Player."
-
-Once you have designed your application (Data Models, UIs, and Logic) in the cloud, you can export it as a standard package and deploy it here. This ensures that while you enjoy the speed of cloud development, your **production data remains 100% private** on your own infrastructure.
-
----
-
-## 🔄 How It Works
-
-Bridging the gap between Cloud Development and On-Premise Execution.
-
-```mermaid
-graph LR
-    Build[☁️ Builder6 Cloud] -->|1. Export Metadata| Package(📦 App Package)
-    Package -->|2. Load| Runtime[⚙️ Builder6 Runtime]
-    
-    subgraph Local_Server [🏢 Your Private Infrastructure]
-    Runtime -->|3. Read/Write| DB[(Your Database)]
-    Runtime -->|4. Serve| User(End User)
-    end
-    
-    style Build fill:#f9f,stroke:#333
-    style Runtime fill:#bbf,stroke:#333,stroke-width:2px
+## 项目结构
 
 ```
+builder6/
+├── packages/
+│   ├── api/          # NestJS API 服务
+│   └── shared/       # 共享工具库
+├── pnpm-workspace.yaml
+└── package.json
+```
 
-1. **Build**: Visually define your application in the cloud.
-2. **Distribute**: Download the application definition (Metadata Package).
-3. **Run**: The Runtime parses the metadata, automatically generating APIs, UI routes, and backend logic, while connecting directly to your local database.
+## 开发环境设置
 
----
-
-## ✨ Key Features
-
-* **🛡️ Data Sovereignty**: The Runtime operates entirely within your network. Your business data never touches the Builder6 Cloud.
-* **🚀 Metadata Driven**: No compilation required. Simply update the configuration files (YAML/JSON) to modify the application behavior instantly.
-* **⚡ High Performance**: Built on a Node.js microservices architecture, capable of handling high concurrency and horizontal scaling.
-* **🔌 API First**: Automatically generates GraphQL and RESTful APIs for all your defined data models.
-* **🐳 Docker Ready**: Optimized for containerized environments (Kubernetes, Docker Swarm).
-
----
-
-## 🚀 Quick Start
-
-### Option 1: Docker (Recommended)
-
-The easiest way to deploy your application is using the official Docker image.
+### 安装依赖
 
 ```bash
-# Run Builder6 Runtime and map the port
-docker run -d \
-  -p 3000:3000 \
-  -e MONGO_URL=mongodb://your-db-host/builder6 \
-  builder6/runtime:latest
-
+pnpm install
 ```
 
-*Replace `/path/to/your/app-package` with the directory containing the metadata exported from Builder6 Cloud.*
+### 开发模式
 
-### Option 2: Run from Source
-
-For developers who want to extend the runtime core or debug locally:
-
-1. **Clone the repository**
 ```bash
-git clone [https://github.com/builder6app/builder6.app.git](https://github.com/builder6app/builder6.app.git)
-cd builder6.app
+# 启动 API 服务（开发模式）
+pnpm dev
 
+# 或启动所有包的开发模式
+pnpm -r dev
 ```
 
+### 构建
 
-2. **Install dependencies**
 ```bash
-yarn install
+# 构建所有包
+pnpm build
 
+# 构建特定包
+pnpm --filter @builder6/api build
+pnpm --filter @builder6/shared build
 ```
 
+### 测试
 
-3. **Configure Environment**
-Copy the example configuration:
 ```bash
-cp .env.example .env
-# Edit .env to configure your Database Connection (MONGO_URL)
+# 运行所有测试
+pnpm test
 
+# 运行特定包的测试
+pnpm --filter @builder6/api test
 ```
 
+## 包说明
 
-4. **Load Application**
-Place your exported metadata files into the `packages` directory (or configure the path in `.env`).
-5. **Start the Server**
+### @builder6/api
+NestJS API 服务,提供后端 REST API。
+
+### @builder6/shared
+共享工具库,包含跨包共享的工具函数和类型定义。
+
+## 添加依赖
+
 ```bash
-yarn start
+# 为根目录添加开发依赖
+pnpm add -D -w <package>
 
+# 为特定包添加依赖
+pnpm --filter @builder6/api add <package>
+pnpm --filter @builder6/shared add <package>
 ```
 
+## 清理
 
-Visit `http://localhost:3000` to access your application.
+```bash
+# 清理所有构建产物和依赖
+pnpm clean
+```
 
----
+## 脚本命令
 
-## 🏗️ Tech Stack
-
-* **Core**: Node.js
-* **Architecture**: Microservices (Moleculer Framework)
-* **Data Storage**: MongoDB (Metadata), SQL/NoSQL (Business Data)
-* **API Engine**: GraphQL, REST
-* **UI Rendering**: React SSR / Amis Renderer
-
----
-
-## 🤝 Contributing
-
-Builder6 Runtime is open source. We welcome contributions to improve performance, security, and extensibility.
-
-* **Report Issues**: [GitHub Issues](https://github.com/builder6app/builder6.app/issues)
-* **Build Apps**: Go to [Builder6.com](https://builder6.com) to start creating.
-
-## 📄 License
-
-This project is licensed under the [MIT License](https://www.google.com/search?q=MIT).
+- `pnpm dev` - 启动 API 服务开发模式
+- `pnpm build` - 构建所有包
+- `pnpm start` - 启动 API 服务
+- `pnpm start:prod` - 生产模式启动 API 服务
+- `pnpm test` - 运行所有测试
+- `pnpm lint` - 运行代码检查
+- `pnpm format` - 格式化代码
+- `pnpm clean` - 清理构建产物

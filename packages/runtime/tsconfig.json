@@ -12,6 +12,7 @@
     "allowSyntheticDefaultImports": true,
     "target": "ES2023",
     "sourceMap": true,
+    "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
     "skipLibCheck": true,
@@ -19,14 +20,6 @@
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": false,
     "strictBindCallApply": false,
-    "noFallthroughCasesInSwitch": false,
-    "paths": {
-      "@builder6/shared": ["./packages/shared/src"],
-      "@builder6/api": ["./packages/api/src"]
-    }
-  },
-  "references": [
-    { "path": "./packages/shared" },
-    { "path": "./packages/api" }
-  ]
+    "noFallthroughCasesInSwitch": false
+  }
 }
