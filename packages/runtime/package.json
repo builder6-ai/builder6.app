@@ -24,6 +24,10 @@
     "@nestjs/common": "^11.0.1",
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
+    "@objectql/api": "^1.1.0",
+    "@objectql/core": "^1.1.0",
+    "@objectql/driver-mongo": "^1.1.0",
+    "@objectql/metadata": "^0.2.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
   },
