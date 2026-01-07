@@ -1,6 +1,6 @@
 <div align="center">
   <a href="https://builder6.com">
-    <img src="https://via.placeholder.com/150" alt="Builder6 Runtime Logo" width="120" height="120">
+    <img src="https://builder6.com/logo.svg" alt="Builder6 Runtime Logo" width="120" height="120">
   </a>
 
   <h1 align="center">Builder6 Runtime</h1>
